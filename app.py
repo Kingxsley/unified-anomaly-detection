@@ -1,8 +1,7 @@
 import streamlit as st
-from dos_dashboard import dos_dashboard
-from dns_dashboard import dns_dashboard
+from tabs import overview, live_stream, manual_entry, metrics, historical
 
-# --- Set Page Configuration ---
+# --- Main App Configuration ---
 st.set_page_config(page_title="Unified Anomaly Detection Dashboard", layout="wide")
 
 # --- Sidebar Settings ---
@@ -19,12 +18,8 @@ thresh = st.sidebar.slider("Anomaly Threshold", 0.01, 1.0, 0.1, 0.01)
 highlight_color = st.sidebar.selectbox("Highlight Color", ["Red", "Orange", "Yellow", "Green", "Blue"], index=3)
 alerts_enabled = st.sidebar.checkbox("Enable Discord Alerts", value=True)
 
-# --- Sidebar Toggle for Dashboard Type ---
-dashboard_type = st.sidebar.radio(
-    "Select Dashboard",
-    ("DNS Anomaly Detection", "DoS Anomaly Detection"),
-    index=0  # Default to DNS Anomaly Detection
-)
+# Toggle to select between DNS and DoS dashboards
+dashboard_option = st.sidebar.selectbox("Select Dashboard", ["DNS", "DoS"])
 
 # --- State Initialization ---
 if "predictions" not in st.session_state:
@@ -32,31 +27,29 @@ if "predictions" not in st.session_state:
 if "attacks" not in st.session_state:
     st.session_state.attacks = []
 
-# --- Unified Tabs for Both Dashboards ---
+# --- Tabs Navigation ---
 tabs = st.tabs(["Overview", "Live Stream", "Manual Entry", "Metrics", "Historical Data"])
 
-# --- Render Dashboard Based on the Selected Type (DNS vs DoS) ---
-if dashboard_type == "DNS Anomaly Detection":
+if dashboard_option == "DNS":
     with tabs[0]:
-        dns_dashboard.render_overview(time_range, time_range_query_map)
+        overview.render(time_range, time_range_query_map)
     with tabs[1]:
-        dns_dashboard.render_live_stream(thresh, highlight_color, alerts_enabled)
+        live_stream.render(thresh, highlight_color, alerts_enabled)
     with tabs[2]:
-        dns_dashboard.render_manual_entry()
+        manual_entry.render()
     with tabs[3]:
-        dns_dashboard.render_metrics(thresh)
+        metrics.render(thresh)
     with tabs[4]:
-        dns_dashboard.render_historical_data(thresh, highlight_color)
+        historical.render(thresh, highlight_color)
 
-elif dashboard_type == "DoS Anomaly Detection":
+elif dashboard_option == "DoS":
     with tabs[0]:
-        dos_dashboard.render_overview(time_range, time_range_query_map)
+        overview.render(time_range, time_range_query_map)  # DoS-specific overview
     with tabs[1]:
-        dos_dashboard.render_live_stream(thresh, highlight_color, alerts_enabled)
+        live_stream.render(thresh, highlight_color, alerts_enabled)  # DoS-specific live stream
     with tabs[2]:
-        dos_dashboard.render_manual_entry()
+        manual_entry.render()  # DoS-specific manual entry
     with tabs[3]:
-        dos_dashboard.render_metrics(thresh)
+        metrics.render(thresh)  # DoS-specific metrics
     with tabs[4]:
-        dos_dashboard.render_historical_data(thresh, highlight_color)
-
+        historical.render(thresh, highlight_color)  # DoS-specific historical data
