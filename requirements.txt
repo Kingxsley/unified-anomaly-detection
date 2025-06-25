@@ -8,9 +8,8 @@ requests==2.26.0
 scikit-learn==0.24.2
 numpy==1.21.2
 
-# Markdown Parsing Libraries
+# Specific versions to avoid conflicts
 markdown-it-py==3.0.0
 mdurl==0.1.2
-
-# Rich for beautiful CLI output
+pygments==2.19.2
 rich==14.0.0
