@@ -1,3 +1,19 @@
-pip uninstall markdown-it-py mdurl pygments rich
-pip install markdown-it-py==3.0.0 mdurl==0.1.2 pygments==2.19.2 rich==14.0.0
+# Core Dependencies for Streamlit and Application
+streamlit==1.17.0
+pandas==1.3.3
+plotly==5.3.1
+influxdb-client==1.21.0
+sqlitecloud==0.3.0
+requests==2.26.0
+scikit-learn==0.24.2
+numpy==1.21.2
+
+# Markdown Parsing Libraries (used in Streamlit)
+markdown-it-py==3.0.0
+mdurl==0.1.2
+
+# Rich for beautiful CLI output (if used)
+rich==14.0.0
+
+# Ensure latest pip version for installation
 pip>=25.1.1
