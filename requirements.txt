@@ -8,9 +8,12 @@ requests==2.26.0
 scikit-learn==0.24.2
 numpy==1.21.2
 
-# Specific versions to avoid conflicts
+# Markdown Parsing Libraries (used in Streamlit)
 markdown-it-py==3.0.0
 mdurl==0.1.2
-pygments==2.19.2
+
+# Rich for beautiful CLI output (if used)
 rich==14.0.0
+
+# Ensure latest pip version for installation
 pip>=25.1.1
