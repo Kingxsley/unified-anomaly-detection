@@ -1,7 +1,6 @@
 import streamlit as st
 from tabs import overview, live_stream, manual_entry, metrics, historical
 
-# --- Main App Configuration ---
 st.set_page_config(page_title="Unified Anomaly Detection Dashboard", layout="wide")
 
 # --- Sidebar Settings ---
@@ -18,8 +17,14 @@ thresh = st.sidebar.slider("Anomaly Threshold", 0.01, 1.0, 0.1, 0.01)
 highlight_color = st.sidebar.selectbox("Highlight Color", ["Red", "Orange", "Yellow", "Green", "Blue"], index=3)
 alerts_enabled = st.sidebar.checkbox("Enable Discord Alerts", value=True)
 
-# Toggle to select between DNS and DoS dashboards
+# --- Toggle Between DNS and DoS ---
 dashboard_option = st.sidebar.selectbox("Select Dashboard", ["DNS", "DoS"])
+
+# --- Set Dashboard Type in Session State ---
+if dashboard_option == "DNS":
+    st.session_state.dashboard = "DNS"
+else:
+    st.session_state.dashboard = "DoS"
 
 # --- State Initialization ---
 if "predictions" not in st.session_state:
@@ -30,7 +35,7 @@ if "attacks" not in st.session_state:
 # --- Tabs Navigation ---
 tabs = st.tabs(["Overview", "Live Stream", "Manual Entry", "Metrics", "Historical Data"])
 
-if dashboard_option == "DNS":
+if st.session_state.dashboard == "DNS":
     with tabs[0]:
         overview.render(time_range, time_range_query_map)
     with tabs[1]:
@@ -42,14 +47,14 @@ if dashboard_option == "DNS":
     with tabs[4]:
         historical.render(thresh, highlight_color)
 
-elif dashboard_option == "DoS":
+elif st.session_state.dashboard == "DoS":
     with tabs[0]:
-        overview.render(time_range, time_range_query_map)  # DoS-specific overview
+        overview.render(time_range, time_range_query_map)
     with tabs[1]:
-        live_stream.render(thresh, highlight_color, alerts_enabled)  # DoS-specific live stream
+        live_stream.render(thresh, highlight_color, alerts_enabled)
     with tabs[2]:
-        manual_entry.render()  # DoS-specific manual entry
+        manual_entry.render()
     with tabs[3]:
-        metrics.render(thresh)  # DoS-specific metrics
+        metrics.render(thresh)
     with tabs[4]:
-        historical.render(thresh, highlight_color)  # DoS-specific historical data
+        historical.render(thresh, highlight_color)
